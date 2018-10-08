@@ -1,0 +1,53 @@
+== HiveMQ DNS discovery plugin
+
+This plugin can be used with any cloud environment / container
+orchestration environment that supports service discovery using a
+round-robin A records.
+
+The following environment variables or property keys should be used to
+customize the discovery parameters.
+
+If a properties file is provided (`dnsdiscovery.properties` in `conf/`
+folder), the plugin will use the key-value pairs from this file and
+reload the values on file changes.
+
+The plugin will attempt to load the properties file first. If it does not
+exist, the plugin will not attempt to reload the properties and instead
+try to read from the environment variables on each iteration until
+broker shutdown.
+
+|=======================================================================
+|Environment Variable |Default value |property key |Meaning
+|HIVEMQ_DNS_DISCOVERY_ADDRESS |- |discoveryAddress |Address providing the A
+record for the usage as cluster node addresses
+|HIVEMQ_DNS_DISCOVERY_TIMEOUT |30 |resolutionTimeout |Wait time
+for DNS resolution to complete
+|=======================================================================
+
+[[sample-dns-record]]
+== Sample DNS record
+
+The following list shows a sample round-robin A-record as expected and parsed by the
+plugin:
+
+....
+$ dig tasks.hivemq        
+
+; <<>> DiG 9.10.3-P4-Debian <<>> tasks.hivemq
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 21767
+;; flags: qr rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;tasks.hivemq.          IN  A
+
+;; ANSWER SECTION:
+tasks.hivemq.       600 IN  A   10.0.0.6
+tasks.hivemq.       600 IN  A   10.0.0.5
+tasks.hivemq.       600 IN  A   10.0.0.4
+tasks.hivemq.       600 IN  A   10.0.0.7
+tasks.hivemq.       600 IN  A   10.0.0.3
+....
+
+This record represents a 5 node cluster on an overlay network.
