@@ -1,4 +1,4 @@
-== HiveMQ DNS discovery plugin
+= HiveMQ DNS discovery plugin
 
 This plugin can be used with any cloud environment / container
 orchestration environment that supports service discovery using a
@@ -79,8 +79,38 @@ Most container orchestration environments support this type of discovery. See th
 * https://mesosphere.github.io/mesos-dns/[Mesos]
 * https://docs.openshift.com/container-platform/3.6/architecture/core_concepts/pods_and_services.html#headless-services[Openshift]
 
+More information on using the discovery mechanisms listed above can be found in the https://github.com/hivemq/hivemq-docker-images/blob/master/hivemq3/dns-image/README.md[DNS discovery image README]
+
 To implement your own solution for this discovery method, you must either provide your HiveMQ deployment with
 
 * a custom DNS record on your cloud provider's DNS service containing the addresses of your HiveMQ instances.
 * an alternative DNS server included with the deployment, serving general DNS to the HiveMQ instances as well as providing a service discovery record.
 
+=== Kubernetes
+
+To use DNS discovery on Kubernetes, you will generally need a headless service pointing to the HiveMQ deployment, similar to the following configuration:
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: hivemq-discovery
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  selector:
+    app: hivemq-cluster1
+  ports:
+    - protocol: TCP
+      port: 1883
+      targetPort: 1883
+  clusterIP: None
+```
+
+NOTE: The selector and name for the service are important. The selector defines which pods are listed in the resulting DNS record.
+
+NOTE: The name will define the `service-name` of the resulting DNS record, which will be generally in the form of `<service-name>.<kubernetes-namespace>.svc.<dns-domain>`.
+
+=== Docker Swarm
+
+Docker swarm provides a DNS entry for service discovery by default. All you have to do is create a service, as shown in https://github.com/hivemq/hivemq-docker-images/blob/master/hivemq3/dns-image/README.md#docker-swarm[DNS discovery image README].
