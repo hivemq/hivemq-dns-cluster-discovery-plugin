@@ -1,4 +1,8 @@
+:extension: https://github.com/hivemq/hivemq-dns-cluster-discovery-extension
+
 = HiveMQ DNS discovery plugin
+
+NOTE: HiveMQ 4 uses a new extension system. This HiveMQ 3 plugin is not compatible with HiveMQ 4. The new version can be found {extension}[here].
 
 This plugin can be used with any cloud environment / container
 orchestration environment that supports service discovery using a
