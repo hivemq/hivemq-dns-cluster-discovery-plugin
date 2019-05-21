@@ -118,3 +118,11 @@ NOTE: The name will define the `service-name` of the resulting DNS record, which
 === Docker Swarm
 
 Docker swarm provides a DNS entry for service discovery by default. All you have to do is create a service, as shown in https://github.com/hivemq/hivemq-docker-images#docker-swarm[DNS discovery image README].
+
+= Contributing
+
+If you want to contribute to HiveMQ DNS Cluster Discovery Plugin, see the link:CONTRIBUTING.md[contribution guidelines].
+
+= License
+
+HiveMQ DNS Cluster Discovery Plugin is licensed under the `APACHE LICENSE, VERSION 2.0`. A copy of the license can be found link:LICENSE.txt[here].
